@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Материалы к Уроку: Stitch + AntiGravity | Мастодонт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050510;
+  --bg2: #0a0a1a;
+  --bg3: #0f0f24;
+  --surface: #111128;
+  --border: #1a1a3a;
+  --border-bright: #2a2a5a;
+  --text: #e8eaf0;
+  --text-dim: #8b8da8;
+  --text-muted: #4a4c6a;
+  --lime: #c8ff00;
+  --lime-dim: #c8ff0015;
+  --lime-mid: #c8ff0030;
+  --blue: #3d5afe;
+  --blue-dim: #3d5afe20;
+  --gradient: linear-gradient(135deg, #c8ff00, #3d5afe);
+  --gradient2: linear-gradient(135deg, #3d5afe, #c8ff00);
+  --r: 14px;
+  --r-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 20% 10%, #c8ff0005 0%, transparent 70%),
+    radial-gradient(ellipse 600px 800px at 80% 90%, #3d5afe05 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::selection { background: var(--lime); color: var(--bg); }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 2px; }
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 24px #c8ff0008, 0 0 64px #3d5afe06; border-color: var(--border); }
+  50% { box-shadow: 0 0 36px #c8ff0018, 0 0 80px #3d5afe10; border-color: var(--border-bright); }
+}
+@keyframes ctaPulse {
+  0%, 100% { box-shadow: 0 0 20px #c8ff0010, 0 0 60px #c8ff0006; border-color: var(--border); }
+  50% { box-shadow: 0 0 32px #c8ff0022, 0 0 80px #c8ff000e; border-color: #c8ff0030; }
+}
+@keyframes lineGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.anim { animation: slideUp 0.6s ease both; }
+.anim-1 { animation-delay: 0.05s; }
+.anim-2 { animation-delay: 0.1s; }
+.anim-3 { animation-delay: 0.15s; }
+.anim-4 { animation-delay: 0.2s; }
+
+/* ═══ NAV ═══ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #050510e8;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--lime);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--lime); }
+
+/* ═══ HERO ═══ */
+.hero {
+  padding: 80px 0 48px;
+  text-align: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #c8ff0008 0%, transparent 65%);
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border: 1px solid var(--border-bright);
+  border-radius: 100px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--lime);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--lime);
+  border-radius: 50%;
+  animation: glow 2s ease infinite;
+}
+
+.hero h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(26px, 5vw, 52px);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+.hero h1 .g {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(14px, 2vw, 16px);
+  color: var(--text-dim);
+  max-width: 520px;
+  margin: 0 auto 36px;
+  font-weight: 300;
+}
+
+/* ═══ VIDEO CARD ═══ */
+.video-card {
+  max-width: 720px;
+  margin: 0 auto 56px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.video-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.video-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #ff000018;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.video-icon svg { width: 16px; height: 16px; fill: #f44; }
+
+.video-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.video-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copy-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  border-radius: var(--r-sm);
+  color: var(--text-dim);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.copy-sm svg { width: 13px; height: 13px; fill: currentColor; }
+.copy-sm:hover { border-color: var(--lime); color: var(--lime); }
+
+/* ═══ SECTION HEADERS ═══ */
+.section-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-tag::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-bright), transparent);
+}
+
+.section-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+
+/* ═══ TOOLS GRID ═══ */
+.tools-section { margin-bottom: 64px; }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.tool-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.25s;
+}
+
+.tool-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #00000040;
+}
+
+.tool-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--lime-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.tool-name {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.tool-price {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--lime);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ═══ STEP CARDS ═══ */
+.steps-section { margin-bottom: 64px; }
+
+.step-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 32px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gradient);
+  border-radius: 0 2px 2px 0;
+}
+
+.step-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.step-num {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.step-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.step-desc {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding-left: 52px;
+}
+
+/* ═══ PROMPT BLOCKS ═══ */
+.prompt-block {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-left: 0;
+  overflow: hidden;
+}
+
+.prompt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.prompt-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--lime);
+  letter-spacing: 0.5px;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--lime-dim);
+  border: 1px solid var(--lime-mid);
+  border-radius: 6px;
+  color: var(--lime);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-btn svg { width: 13px; height: 13px; fill: currentColor; }
+.copy-btn:hover { background: var(--lime-mid); }
+.copy-btn.done { background: #10b98120; border-color: #10b98140; color: #10b981; }
+
+.prompt-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.9;
+  padding: 16px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.prompt-hint {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--blue);
+  font-style: italic;
+}
+
+/* ═══ MCP SECTION ═══ */
+.mcp-section {
+  margin-bottom: 64px;
+}
+
+.mcp-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mcp-step {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.mcp-num {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.mcp-text {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.mcp-text strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ═══ ALL PROMPTS ═══ */
+.all-prompts-section { margin-bottom: 64px; }
+
+/* ═══ ALL LINKS ═══ */
+.all-links-section { margin-bottom: 64px; }
+
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+}
+
+.link-row:hover {
+  border-color: var(--border-bright);
+  background: var(--bg3);
+}
+
+.link-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--lime-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.link-name {
+  font-weight: 700;
+  font-size: 13px;
+  flex: 1;
+}
+
+.link-arrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+
+.link-row:hover .link-arrow { color: var(--lime); transform: translateX(4px); }
+
+/* ═══ CTA ═══ */
+.cta-block {
+  position: relative;
+  max-width: 900px;
+  margin: 60px auto 40px;
+  padding: 36px 70px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  overflow: hidden;
+  animation: ctaPulse 3s ease-in-out infinite;
+}
+
+.cta-text {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.cta-text span {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 40px;
+  background: var(--gradient);
+  color: var(--bg);
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+  border-radius: var(--r);
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px #c8ff0030;
+}
+
+.cta-btn svg { width: 16px; height: 16px; fill: var(--bg); }
+
+/* ═══ FOOTER ═══ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.footer-brand {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 4px;
+  color: var(--lime);
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+}
+
+.footer-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--lime); }
+
+/* ═══ TOAST ═══ */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--lime);
+  color: var(--bg);
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 100px;
+  z-index: 10000;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ═══ DIVIDER ═══ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+  margin: 64px 0;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 640px) {
+  nav { flex-direction: column; gap: 10px; }
+  .nav-links { justify-content: center; flex-wrap: wrap; }
+  .hero { padding: 60px 0 32px; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .step-card { padding: 24px 20px; }
+  .step-desc { padding-left: 0; }
+  .video-card { flex-direction: column; align-items: flex-start; }
+  .step-num { font-size: 28px; }
+  .cta-block { flex-direction: column; text-align: center; padding: 32px 24px; }
+  .cta-btn { width: 100%; justify-content: center; }
+  .mcp-step { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">Скопировано!</div>
+
+<nav>
+  <div class="nav-brand">МАСТОДОНТ</div>
+  <div class="nav-links">
+    <a href="#tools">Инструменты</a>
+    <a href="#steps">Шаги</a>
+    <a href="#mcp">MCP</a>
+    <a href="#all-prompts">Все промпты</a>
+    <a href="#all-links">Ссылки</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge anim"><span class="badge-dot"></span> МАТЕРИАЛЫ К УРОКУ</div>
+  <h1 class="anim anim-1"><span class="g">Stitch</span> + <span class="g">AntiGravity</span></h1>
+  <p class="hero-sub anim anim-2">Все промпты и ссылки из видео. Скопируй и повтори за 5 минут.</p>
+
+  <div class="video-card anim anim-3">
+    <div class="video-left">
+      <div class="video-icon">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </div>
+      <div style="min-width:0">
+        <div class="video-label">Ищи на YouTube</div>
+        <div class="video-title" id="videoName">AntiGravity + Stitch создают БЕЗУМНЫЕ сайты (Новый навык)</div>
+      </div>
+    </div>
+    <button class="copy-sm" onclick="copyEl('videoName',this)">
+      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+      Скопировать
+    </button>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-section" id="tools">
+  <div class="section-tag">Инструменты</div>
+  <div class="section-title">Что понадобится</div>
+  <div class="tools-grid">
+    <a href="https://stitch.withgoogle.com" target="_blank" class="tool-card">
+      <div class="tool-icon">🧵</div>
+      <div>
+        <div class="tool-name">Google Stitch</div>
+        <div class="tool-price">бесплатно</div>
+      </div>
+    </a>
+    <a href="https://antigravity.google" target="_blank" class="tool-card">
+      <div class="tool-icon">🚀</div>
+      <div>
+        <div class="tool-name">Google AntiGravity</div>
+        <div class="tool-price">бесплатно</div>
+      </div>
+    </a>
+    <a href="https://github.com" target="_blank" class="tool-card">
+      <div class="tool-icon">🐙</div>
+      <div>
+        <div class="tool-name">GitHub</div>
+        <div class="tool-price">бесплатно</div>
+      </div>
+    </a>
+    <a href="https://vercel.com" target="_blank" class="tool-card">
+      <div class="tool-icon">▲</div>
+      <div>
+        <div class="tool-name">Vercel</div>
+        <div class="tool-price">бесплатно</div>
+      </div>
+    </a>
+    <a href="https://github.com/google-labs-code/stitch-skills" target="_blank" class="tool-card">
+      <div class="tool-icon">⚡</div>
+      <div>
+        <div class="tool-name">GitHub со скиллами</div>
+        <div class="tool-price">репозиторий</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STEPS -->
+<section class="steps-section" id="steps">
+  <div class="section-tag">Пошаговый гайд</div>
+  <div class="section-title">Шаги из видео</div>
+
+  <!-- STEP 1 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">01</div>
+      <div class="step-title">Создание приложения в Stitch</div>
+    </div>
+    <p class="step-desc">Открой Stitch и вставь промпт. Вместо apple.com подставь URL своего сайта - Stitch возьмёт оттуда визуал.</p>
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <span class="prompt-label">Промпт 1 - Stitch</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          Скопировать
+        </button>
+      </div>
+      <div class="prompt-text">Привет, хочу чтобы ты создал трёхстраничное мобильное приложение - Mastodon Hub. Это мой личный хаб. Первая страница - главная с новостями по нейросетям. Вторая - мои видео. Третья - форум, где можно пообщаться и задать вопросы. https://apple.com - возьми за основу визуал моего сайта и сделай всё на русском.</div>
+      <div class="prompt-hint">Вместо apple.com вставь URL своего сайта</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">02</div>
+      <div class="step-title">Запуск в AntiGravity</div>
+    </div>
+    <p class="step-desc">Скачай zip-архив из Stitch, загрузи его в AntiGravity и попроси запустить.</p>
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <span class="prompt-label">Промпт 2 - AntiGravity</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          Скопировать
+        </button>
+      </div>
+      <div class="prompt-text">Привет, я загрузил код трёхстраничного мобильного приложения. Запусти его на localhost пожалуйста.</div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">03</div>
+      <div class="step-title">Установка скиллов</div>
+    </div>
+    <p class="step-desc">Подключи скиллы из GitHub-репозитория, чтобы Stitch мог работать через MCP.</p>
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <span class="prompt-label">Промпт 3 - Скиллы</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          Скопировать
+        </button>
+      </div>
+      <div class="prompt-text">Установи эти скиллы в репозиторий для Stitch: https://github.com/google-labs-code/stitch-skills</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">04</div>
+      <div class="step-title">Stitch Loop - два проекта</div>
+    </div>
+    <p class="step-desc">Используй Stitch Loop для автоматического создания двух проектов одним промптом.</p>
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <span class="prompt-label">Промпт 4 - Stitch Loop</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          Скопировать
+        </button>
+      </div>
+      <div class="prompt-text">Используй Stitch MCP и Stitch Loop скилл. Создай два отдельных проекта в Stitch. Первый - для продажи африканского кофе. Второй - приложение Mastodon Hub, мой личный бренд-хаб: новости по нейросетям, мои видео, форум. Используй стиль с сайта apple.com. Для каждого - три страницы: главная мобильная, выбор контента, финальный экран. Всё на русском.</div>
+      <div class="prompt-hint">Вместо apple.com вставь URL своего сайта</div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">05</div>
+      <div class="step-title">Сборка и деплой</div>
+    </div>
+    <p class="step-desc">Когда дизайн готов - попроси AntiGravity собрать полноценное приложение и запушить на GitHub.</p>
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <span class="prompt-label">Промпт 5 - Деплой</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          Скопировать
+        </button>
+      </div>
+      <div class="prompt-text">Мне нравится дизайн из Stitch. Собери это в полноценное приложение и запушь на GitHub. Мобильное приложение, по тем брендбук-гайдлайнам что созданы в Stitch.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MCP -->
+<section class="mcp-section" id="mcp">
+  <div class="section-tag">Настройка</div>
+  <div class="section-title">Как подключить Stitch к AntiGravity через MCP</div>
+
+  <div class="mcp-steps">
+    <div class="mcp-step">
+      <div class="mcp-num">1</div>
+      <div class="mcp-text">Заходишь на <strong>stitch.withgoogle.com</strong> → Settings → Create API Key → копируешь ключ</div>
+    </div>
+    <div class="mcp-step">
+      <div class="mcp-num">2</div>
+      <div class="mcp-text">Открываешь <strong>AntiGravity</strong> → раздел MCP → находишь Stitch → вставляешь ключ</div>
+    </div>
+    <div class="mcp-step">
+      <div class="mcp-num">3</div>
+      <div class="mcp-text">Готово - <strong>Stitch</strong> появится в списке MCP серверов с шестью скиллами</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ALL PROMPTS -->
+<section class="all-prompts-section" id="all-prompts">
+  <div class="section-tag">Копируй</div>
+  <div class="section-title">Все промпты в одном месте</div>
+
+  <div class="prompt-block" style="margin-bottom:16px">
+    <div class="prompt-header">
+      <span class="prompt-label">Промпт 1 - Stitch: создание приложения</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Скопировать
+      </button>
+    </div>
+    <div class="prompt-text">Привет, хочу чтобы ты создал трёхстраничное мобильное приложение - Mastodon Hub. Это мой личный хаб. Первая страница - главная с новостями по нейросетям. Вторая - мои видео. Третья - форум, где можно пообщаться и задать вопросы. https://apple.com - возьми за основу визуал моего сайта и сделай всё на русском.</div>
+  </div>
+
+  <div class="prompt-block" style="margin-bottom:16px">
+    <div class="prompt-header">
+      <span class="prompt-label">Промпт 2 - AntiGravity: запуск проекта</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Скопировать
+      </button>
+    </div>
+    <div class="prompt-text">Привет, я загрузил код трёхстраничного мобильного приложения. Запусти его на localhost пожалуйста.</div>
+  </div>
+
+  <div class="prompt-block" style="margin-bottom:16px">
+    <div class="prompt-header">
+      <span class="prompt-label">Промпт 3 - Установка скиллов</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Скопировать
+      </button>
+    </div>
+    <div class="prompt-text">Установи эти скиллы в репозиторий для Stitch: https://github.com/google-labs-code/stitch-skills</div>
+  </div>
+
+  <div class="prompt-block" style="margin-bottom:16px">
+    <div class="prompt-header">
+      <span class="prompt-label">Промпт 4 - Stitch Loop: два проекта</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Скопировать
+      </button>
+    </div>
+    <div class="prompt-text">Используй Stitch MCP и Stitch Loop скилл. Создай два отдельных проекта в Stitch. Первый - для продажи африканского кофе. Второй - приложение Mastodon Hub, мой личный бренд-хаб: новости по нейросетям, мои видео, форум. Используй стиль с сайта apple.com. Для каждого - три страницы: главная мобильная, выбор контента, финальный экран. Всё на русском.</div>
+  </div>
+
+  <div class="prompt-block" style="margin-bottom:16px">
+    <div class="prompt-header">
+      <span class="prompt-label">Промпт 5 - Сборка и деплой</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Скопировать
+      </button>
+    </div>
+    <div class="prompt-text">Мне нравится дизайн из Stitch. Собери это в полноценное приложение и запушь на GitHub. Мобильное приложение, по тем брендбук-гайдлайнам что созданы в Stitch.</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ALL LINKS -->
+<section class="all-links-section" id="all-links">
+  <div class="section-tag">Ресурсы</div>
+  <div class="section-title">Все ссылки</div>
+
+  <a href="https://stitch.withgoogle.com" target="_blank" class="link-row">
+    <div class="link-icon">🧵</div>
+    <div class="link-name">Google Stitch</div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://antigravity.google" target="_blank" class="link-row">
+    <div class="link-icon">🚀</div>
+    <div class="link-name">Google AntiGravity</div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://github.com/google-labs-code/stitch-skills" target="_blank" class="link-row">
+    <div class="link-icon">⚡</div>
+    <div class="link-name">GitHub со скиллами для Stitch</div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://github.com" target="_blank" class="link-row">
+    <div class="link-icon">🐙</div>
+    <div class="link-name">GitHub</div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://vercel.com" target="_blank" class="link-row">
+    <div class="link-icon">▲</div>
+    <div class="link-name">Vercel</div>
+    <span class="link-arrow">→</span>
+  </a>
+</section>
+
+</div>
+
+<!-- CTA -->
+<div class="wrap">
+  <div class="cta-block">
+    <div class="cta-text">Пошаговый план по&nbsp;выходу<br>на&nbsp;первые <span>100к в&nbsp;ИИ</span> в&nbsp;2026</div>
+    <a href="https://t.me/mastodont_aibot?start=agency" target="_blank" class="cta-btn">
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      ЗАБРАТЬ
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">МАСТОДОНТ</div>
+  <div class="footer-tagline">AI и нейросети - просто, по делу</div>
+  <div class="footer-links">
+    <a href="#" onclick="copyEl('videoName',null);return false;">YouTube</a>
+  </div>
+</footer>
+
+<script>
+function showToast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text || 'Скопировано!';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function copyEl(id, btn) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    showToast();
+    if (btn) {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg> Готово!';
+      btn.style.borderColor = '#10b981';
+      btn.style.color = '#10b981';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+    }
+  });
+}
+
+function copyPrompt(btn) {
+  const block = btn.closest('.prompt-block');
+  const text = block.querySelector('.prompt-text').textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast();
+    btn.classList.add('done');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg> Готово!';
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('done'); }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
